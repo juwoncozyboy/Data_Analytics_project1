@@ -1,0 +1,71 @@
+# config.yaml
+# Feature Engineering 등에 사용되는 하이퍼파라미터를 추가하여 관리할 수 있습니다.
+
+name: DA23_Project1_SAMPLE
+memo: |
+    남겨둘 메모가 있다면 여기에.
+    여러 줄로도 작성 가능
+seed: 2023
+n_gpu: 0
+
+model:
+    type: MLP
+    args: 
+        n_hidden_list: [128, 64]
+        dropout_p: 0.2
+        batch_norm: false
+
+dataset:
+    type: PriceDataset
+    args:
+        data_dir: data/
+        start_date: 2013-01-01
+        in_columns: ['BrentOil_Price', 'Copper_Price', 'CrudeOil_Price', 'Gasoline_Price', 'Gold_Price', 'NaturalGas_Price', 
+        'Platinum_Price', 'Silver_Price', 'AUD_Price', 'CNY_Price', 'EUR_Price', 'GBP_Price', 'HKD_Price', 'JPY_Price', 'USD_Price'] # [ USD_Price, Gold_Price, Silver_Price ] 로 작성해도 됨
+            
+        input_days: 5
+        out_columns:  # [ USD_Price ] 로 작성해도 됨
+            - USD_Price
+        
+dataloader:
+    type: DataLoader
+    args:
+        batch_size: 128
+        shuffle: true
+        num_workers: 4
+
+optimizer:
+    type: Adam
+    args:
+        lr: 0.001
+        weight_decay: 0.01
+        amsgrad: true
+
+loss: MSELoss
+
+lr_scheduler:
+    type: StepLR
+    args:
+        step_size: 10
+        gamma: 0.9
+
+metrics: [mae, mape]
+
+train:
+    epochs: 30
+    print_period: 5
+    save_dir: saved/
+    save_model_name: teamX_model
+    save_period: 10
+    resume: false
+    resume_path: checkpoints/teamX_model-e30.pt
+    # early_stop: 10  # not implemented here
+    tensorboard: true
+
+test:
+    metrics: [mae]  # !!! 수정 금지 !!!
+    load_path: saved/checkpoints/teamF_model.pt  # !!! 수정 금지 !!!
+    # 주의: 최종 제출할 모델의 파일명은 반드시 'teamX_model.pt'로 변경되어야 하며, 'saved/checkpoints/'에 저장되어야 함
+
+
+
