@@ -52,11 +52,11 @@ lr_scheduler:
 metrics: [mae, mape]
 
 train:
-    epochs: 30
+    epochs: 100
     print_period: 5
     save_dir: saved/
     save_model_name: teamX_model
-    save_period: 10
+    save_period: 100
     resume: false
     resume_path: checkpoints/teamX_model-e30.pt
     # early_stop: 10  # not implemented here
